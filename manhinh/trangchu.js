@@ -4,17 +4,13 @@ import {
   FlatList,
   View,
   ActivityIndicator,
-  TouchableNativeFeedback,
-  Keyboard
 } from "react-native";
 import {
   Item,
   Input,
   Icon,
-  Button,
   Container,
   Header,
-  Content,
   List,
   ListItem,
   Left,
@@ -39,9 +35,6 @@ export default class Home extends Component {
       refreshing: false
     };
   }
-  componentDidMount() {
-    this.getData();
-  }
 
   getData = () => {
     this.setState({ isLoading: true });
@@ -56,16 +49,19 @@ export default class Home extends Component {
           fulldata: this.state.data.concat(resJson.data),
           refreshing: false
         });
-        resJson.data.length == 6
-          ? this.setState({ allowLoadMore: true })
-          : this.setState({ allowLoadMore: false });
+        if (resJson.data.length == 6){
+          this.setState({ allowLoadMore: true })
+        }else{
+          this.setState({ allowLoadMore: false })
+        }
       })
-      .catch(error => {
-        this.setState({ error, isLoading: false, refreshing: false });
-      });
   };
 
-  handleLoadMore = () => {
+  componentDidMount() {
+    this.getData();
+  }
+
+  SuDungLoadMore = () => {
     if (this.state.allowLoadMore == true) {
       this.setState(
         {
@@ -75,28 +71,19 @@ export default class Home extends Component {
       );
     }
   };
-  renderSeparator = () => {
-    return <View style={styles.viewSeparator} />;
-  };
-  renderFooter = () => {
-    if (!this.state.isLoading) return null;
-    return (
-      <View style={styles.viewFooter}>
-        <ActivityIndicator animating size="large" />
-      </View>
-    );
-  };
-  renderHeader = () => {
+
+
+  HienThiToolbar = () => {
     return (
       <Header searchBar rounded>
         <Item>
-          <Icon name="ios-search" color='#000' />
+          <Icon name="ios-search"/>
           <Input placeholder="Tìm kiếm" onChangeText={this.timKiem} />
         </Item>
       </Header>
     );
   };
-  handleRefresh = () => {
+  TaiLaiTrang = () => {
     this.setState(
       {
         data: [],
@@ -129,32 +116,30 @@ export default class Home extends Component {
             data={this.state.data}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("ReviewDetails", item)}
+                onPress={() => navigation.navigate("TrangThongTin", item)}
               >
                 <ListItem avatar>
                   <Left>
-                    <Thumbnail source={{ uri: item.avatar }} />
+                    <Thumbnail style={{width: 50, height: 50}} source={{ uri: item.avatar }} />
                   </Left>
                   <Body>
-                    <Text>
+                    <Text style={{fontSize: 22}}>
                       {item.first_name} {item.last_name}
                     </Text>
-                    <Text>{item.email}</Text>
+                    <Text style={{fontSize: 14}}>{item.email}</Text>
                   </Body>
                   <Right>
-                    <Icon name="arrow-forward" color='#000' />
+                    <Icon name="arrow-forward" />
                   </Right>
                 </ListItem>
               </TouchableOpacity>
             )}
             keyExtractor={item => item.email}
-            ItemSeparatorComponent={this.renderSeparator}
-            ListHeaderComponent={this.renderHeader}
-            ListFooterComponent={this.renderFooter}
+            ListHeaderComponent={this.HienThiToolbar}
             refreshing={this.state.refreshing}
-            onRefresh={this.handleRefresh}
-            onEndReachedThreshold={1}
-            onEndReached={this.handleLoadMore}
+            onRefresh={this.TaiLaiTrang}
+            onEndReachedThreshold={0.5}
+            onEndReached={this.SuDungLoadMore}
           />
         </List>
       </Container>
@@ -163,17 +148,5 @@ export default class Home extends Component {
 }
 
 const styles = StyleSheet.create({
-  viewSeparator: {
-    height: 1,
-    margin: 10,
-    width: "100%",
-    backgroundColor: "#000",
-
-  },
-  viewFooter: {
-    paddingVertical: 20,
-    borderTopWidth: 1,
-    margin: 10,
-    borderColor: "#000"
-  }
+  
 });

@@ -1,8 +1,8 @@
 import React from 'react';
 import { createStackNavigator,TransitionPresets,CardStyleInterpolators} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-import Home from '../screens/home';
-import ReviewDetails from '../screens/detail';
+import Home from '../manhinh/trangchu';
+import TrangThongTin from '../manhinh/thongtin';
 import { Easing } from 'react-native';
 
 const Stack = createStackNavigator();
@@ -10,7 +10,7 @@ const config = {
   animation: 'spring',
   config: {
     stiffness: 1000,
-    damping: 50,
+    damping: 500,
     mass: 3,
     overshootClamping: true,
     restDisplacementThreshold: 0.01,
@@ -18,11 +18,15 @@ const config = {
   },
 };
 const closeConfig={
-  animation:'timing',
-  config:{
-    duration:500,
-    easing:Easing.linear
-  }
+  animation: 'spring',
+  config: {
+    stiffness: 1000,
+    damping: 500,
+    mass: 3,
+    overshootClamping: true,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
 }
 export default  Navigator =() =>{
   return (
@@ -44,7 +48,7 @@ export default  Navigator =() =>{
         <Stack.Screen name='Home' component={Home} options={{ title: 'Danh sách người dùng'}} />
         
         <Stack.Screen 
- name='ReviewDetails' component={ReviewDetails} options={{ title: 'Thông tin người dùng'}} />
+ name='TrangThongTin' component={TrangThongTin} options={{ title: 'Thông tin người dùng'}} />
 
       </Stack.Navigator>
       </NavigationContainer>
